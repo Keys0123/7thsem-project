@@ -56,6 +56,18 @@ export const useUserStore = create((set, get) => ({
 		}
 	},
 
+	updateProfile: async ({ name, phone, address, avatarBase64 }) => {
+		set({ loading: true });
+		try {
+			const res = await axios.put("/auth/profile", { name, phone, address, avatar: avatarBase64 });
+			set({ user: res.data, loading: false });
+			return res.data;
+		} catch (error) {
+			set({ loading: false });
+			throw error;
+		}
+	},
+
 	refreshToken: async () => {
 		// Prevent multiple simultaneous refresh attempts
 		if (get().checkingAuth) return;

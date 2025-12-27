@@ -40,7 +40,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 					<div className='overflow-hidden'>
 						<div
 							className='flex transition-transform duration-300 ease-in-out'
-							style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
+							style={{ transform: `translateX(-Rs.{currentIndex * (100 / itemsPerPage)}%)` }}
 						>
 							{featuredProducts?.map((product) => (
 								<div key={product._id} className='w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-shrink-0 px-2'>
@@ -55,7 +55,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 										<div className='p-4'>
 											<h3 className='text-lg font-semibold mb-2 text-white'>{product.name}</h3>
 											<p className='text-emerald-300 font-medium mb-4'>
-												${product.price.toFixed(2)}
+												Rs.{product.price.toFixed(2)}
 											</p>
 											<button
 												onClick={() => addToCart(product)}

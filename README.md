@@ -20,6 +20,10 @@ CLOUDINARY_API_SECRET=your_api_secret
 STRIPE_SECRET_KEY=your_stripe_secret_key
 CLIENT_URL=http://localhost:5173
 NODE_ENV=development
+ESEWA_MERCHANT_CODE=your_esewa_merchant_code
+# Optional: override eSewa endpoints (use sandbox urls for testing)
+ESEWA_PAYMENT_URL=https://esewa.com.np/epay/main
+ESEWA_VERIFY_URL=https://esewa.com.np/epay/transrec
 ```
 
 ### Run this app locally

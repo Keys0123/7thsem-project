@@ -27,9 +27,22 @@ const productSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		variants: [
+			{
+				sku: { type: String },
+				color: { type: String },
+				size: { type: String },
+				price: { type: Number, min: 0 },
+				stock: { type: Number, default: 0, min: 0 },
+				image: { type: String },
+			},
+		],
 	},
 	{ timestamps: true }
 );
+
+// create text index for name and description to support full-text search
+productSchema.index({ name: "text", description: "text" });
 
 const Product = mongoose.model("Product", productSchema);
 

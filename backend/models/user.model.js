@@ -7,6 +7,18 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "Name is required"],
 		},
+		avatar: {
+			type: String,
+			default: "",
+		},
+		phone: {
+			type: String,
+			default: "",
+		},
+		address: {
+			type: String,
+			default: "",
+		},
 		email: {
 			type: String,
 			required: [true, "Email is required"],
@@ -28,6 +40,9 @@ const userSchema = new mongoose.Schema(
 				product: {
 					type: mongoose.Schema.Types.ObjectId,
 					ref: "Product",
+				},
+				variant: {
+					type: String, // stores variant id or sku
 				},
 			},
 		],

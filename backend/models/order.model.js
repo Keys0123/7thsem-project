@@ -35,6 +35,16 @@ const orderSchema = new mongoose.Schema(
 			type: String,
 			unique: true,
 		},
+		paymentMethod: {
+			type: String,
+			enum: ["card", "esewa", "cod"],
+			default: "card",
+		},
+		shippingInfo: {
+			name: { type: String },
+			address: { type: String },
+			phone: { type: String },
+		},
 	},
 	{ timestamps: true }
 );

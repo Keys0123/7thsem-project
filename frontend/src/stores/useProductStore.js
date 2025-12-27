@@ -40,6 +40,28 @@ export const useProductStore = create((set) => ({
 			toast.error(error.response.data.error || "Failed to fetch products");
 		}
 	},
+	searchProducts: async (query, options = {}) => {
+		set({ loading: true });
+		try {
+			const { page = 1, limit = 20, category, minPrice, maxPrice, sort } = options || {};
+			const params = new URLSearchParams();
+			params.append("q", query);
+			params.append("page", page);
+			params.append("limit", limit);
+			if (category) params.append("category", category);
+			if (minPrice !== undefined && minPrice !== null) params.append("minPrice", minPrice);
+			if (maxPrice !== undefined && maxPrice !== null) params.append("maxPrice", maxPrice);
+			if (sort) params.append("sort", sort);
+
+			const response = await axios.get(`/products/search?${params.toString()}`);
+			set({ products: response.data.products, loading: false });
+			return response.data;
+		} catch (error) {
+			set({ error: "Failed to search products", loading: false });
+			toast.error(error.response?.data?.message || "Search failed");
+			return null;
+		}
+	},
 	deleteProduct: async (productId) => {
 		set({ loading: true });
 		try {

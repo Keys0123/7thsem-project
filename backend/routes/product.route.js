@@ -4,6 +4,8 @@ import {
 	deleteProduct,
 	getAllProducts,
 	getFeaturedProducts,
+	searchProducts,
+	suggestProducts,
 	getProductsByCategory,
 	getRecommendedProducts,
 	toggleFeaturedProduct,
@@ -14,6 +16,8 @@ const router = express.Router();
 
 router.get("/", protectRoute, adminRoute, getAllProducts);
 router.get("/featured", getFeaturedProducts);
+router.get("/search", searchProducts);
+router.get("/suggest", suggestProducts);
 router.get("/category/:category", getProductsByCategory);
 router.get("/recommendations", getRecommendedProducts);
 router.post("/", protectRoute, adminRoute, createProduct);

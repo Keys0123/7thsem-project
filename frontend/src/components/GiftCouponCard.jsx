@@ -34,7 +34,7 @@ const GiftCouponCard = () => {
 			<div className='space-y-4'>
 				<div>
 					<label htmlFor='voucher' className='mb-2 block text-sm font-medium text-gray-300'>
-						Do you have a voucher or gift card?
+						Do you have a voucher or KEYS gift card?
 					</label>
 					<input
 						type='text'
@@ -56,12 +56,12 @@ const GiftCouponCard = () => {
 					whileTap={{ scale: 0.95 }}
 					onClick={handleApplyCoupon}
 				>
-					Apply Code
+					Apply KEYS Code
 				</motion.button>
 			</div>
 			{isCouponApplied && coupon && (
 				<div className='mt-4'>
-					<h3 className='text-lg font-medium text-gray-300'>Applied Coupon</h3>
+					<h3 className='text-lg font-medium text-gray-300'>Applied KEYS Coupon</h3>
 
 					<p className='mt-2 text-sm text-gray-400'>
 						{coupon.code} - {coupon.discountPercentage}% off

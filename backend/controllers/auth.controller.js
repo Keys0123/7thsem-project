@@ -1,6 +1,7 @@
 import { redis } from "../lib/redis.js";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import cloudinary from "../lib/cloudinary.js";
 
 const generateTokens = (userId) => {
 	const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
@@ -139,6 +140,43 @@ export const getProfile = async (req, res) => {
 	try {
 		res.json(req.user);
 	} catch (error) {
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+};
+
+export const updateProfile = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+		if (!user) return res.status(404).json({ message: "User not found" });
+
+		const { name, phone, address } = req.body;
+
+		if (name) user.name = name;
+		if (phone !== undefined) user.phone = phone;
+		if (address !== undefined) user.address = address;
+
+		// avatar: accept base64 data or url in `avatar`
+		const { avatar } = req.body;
+		if (avatar) {
+			// if avatar already a URL and pointing to cloudinary we can set directly
+			if (typeof avatar === "string" && avatar.startsWith("http")) {
+				user.avatar = avatar;
+			} else {
+				// upload base64 image to cloudinary
+				try {
+					const uploadRes = await cloudinary.uploader.upload(avatar, { folder: "avatars" });
+					user.avatar = uploadRes.secure_url;
+				} catch (e) {
+					console.log("avatar upload failed", e.message || e);
+				}
+			}
+		}
+
+		await user.save();
+
+		res.json({ _id: user._id, name: user.name, email: user.email, role: user.role, avatar: user.avatar, phone: user.phone, address: user.address });
+	} catch (error) {
+		console.log("Error in updateProfile controller", error.message);
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };

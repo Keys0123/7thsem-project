@@ -7,7 +7,7 @@ import Confetti from "react-confetti";
 
 const PurchaseSuccessPage = () => {
 	const [isProcessing, setIsProcessing] = useState(true);
-	const { clearCart } = useCartStore();
+	const { clearCart, cart, coupon } = useCartStore();
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
@@ -24,13 +24,49 @@ const PurchaseSuccessPage = () => {
 			}
 		};
 
+
 		const sessionId = new URLSearchParams(window.location.search).get("session_id");
+		const pid = new URLSearchParams(window.location.search).get("pid");
+		const amt = new URLSearchParams(window.location.search).get("amt");
+		const orderId = new URLSearchParams(window.location.search).get("orderId");
+
 		if (sessionId) {
 			handleCheckoutSuccess(sessionId);
-		} else {
-			setIsProcessing(false);
-			setError("No session ID found in the URL");
+			return;
 		}
+
+		if (pid && amt) {
+			// call backend to verify eSewa payment
+			const handleEsewa = async () => {
+				try {
+					await axios.post("/payments/esewa/verify", {
+						pid,
+						amt,
+						products: cart,
+						couponCode: coupon ? coupon.code : null,
+					});
+					clearCart();
+				} catch (err) {
+					console.error(err);
+					setError("eSewa verification failed");
+				} finally {
+					setIsProcessing(false);
+				}
+			};
+
+			handleEsewa();
+			return;
+		}
+
+		if (orderId) {
+			// COD flow: order already created on server
+			clearCart();
+			setIsProcessing(false);
+			return;
+		}
+
+		setIsProcessing(false);
+		setError("No session ID, eSewa pid, or orderId found in the URL");
 	}, [clearCart]);
 
 	if (isProcessing) return "Processing...";
